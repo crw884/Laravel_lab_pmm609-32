@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('group_id')->constrained('groups');
             $table->string('text', 1023);
+            $table->string('tags', 511)->nullable();
             $table->binary('image');
             $table->binary('audio');
         });
