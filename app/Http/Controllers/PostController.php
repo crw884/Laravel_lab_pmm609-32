@@ -23,7 +23,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('post_create');
     }
 
     /**
@@ -79,7 +79,7 @@ class PostController extends Controller
         $post = Post::findOrFail($id);
 
         if (!$post->image) {
-            return response(null);
+            return null;
         }
 
         return response($post->image);
@@ -90,7 +90,7 @@ class PostController extends Controller
         $post = Post::findOrFail($id);
 
         if (!$post->audio) {
-            return response(null);
+            return null;
         }
 
         return response($post->audio);

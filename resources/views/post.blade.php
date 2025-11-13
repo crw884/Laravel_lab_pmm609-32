@@ -11,12 +11,18 @@
     <p>Группа: {{$post->group->name}}</p>
 
     <p>{{$post->text}}</p>
-    <img src="{{route('post.image', $post->id)}}" alt="" style="width: 300px; height: 300px">
-    <p>
-        <audio controls>
-            <source src="{{route('post.audio', $post->id)}}">
-        </audio>
-    </p>
+    @if($post->image)
+        <img src="{{route('post.image', $post->id)}}" alt="" style="width: 300px; height: 300px">
+    @endif
+
+    @if($post->audio)
+        <p>
+            <audio controls>
+                <source src="{{route('post.audio', $post->id)}}">
+            </audio>
+        </p>
+    @endif
+
 
 @if(count($comments) > 0)
     <p>Комментарии:</p>
