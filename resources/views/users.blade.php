@@ -15,7 +15,7 @@
     </thead>
     @foreach($users as $user)
         <tr>
-            <td><a href="{{route('user', $user->id)}}">{{$user->id}}</a></td>
+            <td><a href="{{route('user.show', $user->id)}}">{{$user->id}}</a></td>
             <td>{{$user->name}}</td>
             <td>{{$user->email}}</td>
             <td>{{$user->status}}</td>

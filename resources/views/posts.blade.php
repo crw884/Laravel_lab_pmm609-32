@@ -15,7 +15,7 @@
     </thead>
     @foreach($posts as $post)
         <tr>
-            <td><a href="{{route('post', $post->id)}}">{{$post->id}}</a></td>
+            <td><a href="{{route('post.show',$post->id)}}">{{$post->id}}</a></td>
             <td>{{$post->user->name}}</td>
             <td>{{$post->group->name}}</td>
             <td>{{\Illuminate\Support\Str::limit($post->text, 50)}}</td>

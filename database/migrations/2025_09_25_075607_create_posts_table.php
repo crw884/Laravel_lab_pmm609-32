@@ -18,8 +18,8 @@ return new class extends Migration
             $table->foreignId('group_id')->constrained('groups');
             $table->string('text', 1023);
             $table->string('tags', 511)->nullable();
-            $table->binary('image');
-            $table->binary('audio');
+            $table->string('image')->nullable();
+            $table->string('audio')->nullable();
         });
     }
 

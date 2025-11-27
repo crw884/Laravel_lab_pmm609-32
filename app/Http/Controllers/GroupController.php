@@ -23,7 +23,7 @@ class GroupController extends Controller
      */
     public function create()
     {
-        //
+        return view('group_create');
     }
 
     /**
@@ -31,7 +31,19 @@ class GroupController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|max:255',
+            'description' => 'required|max:255'
+        ]);
+
+        Group::create([
+            'admin_id' => 1, //Auth::id()
+            'name' => $validated['name'],
+            'description' => $validated['description'],
+            'is_private' => $request->boolean('private'),
+        ]);
+
+        return redirect()->route('group.index')->with('success', 'Группа успешно создана.');
     }
 
     /**
@@ -49,7 +61,10 @@ class GroupController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $group = Group::all()->where('id', $id)->first();
+        return view('group_edit', [
+            'group' => $group,
+        ]);
     }
 
     /**
@@ -57,7 +72,16 @@ class GroupController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $group = Group::all()->where('id', $id)->first();
+        $validated = $request->validate([
+            'description' => 'required|max:255'
+        ]);
+        $group->update([
+            'description' => $validated['description'],
+            'is_private' => $request->boolean('private'),
+        ]);
+
+        return redirect()->route('group.index')->with('success', 'Группа обновлена.');
     }
 
     /**
@@ -65,6 +89,8 @@ class GroupController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $group = Group::all()->where('id', $id)->first();
+        $group->delete();
+        return redirect()->route('group.index')->with('success', 'Группа успешно удалена.');
     }
 }

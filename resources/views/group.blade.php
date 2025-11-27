@@ -12,14 +12,17 @@
     <td>Название</td>
     <td>Описание</td>
     <td>Админ</td>
+
     </thead>
     <tr>
         <td>{{$group->id}}</td>
         <td>{{$group->name}}</td>
         <td>{{$group->description}}</td>
         <td>{{$group->admin->name}}</td>
+
     </tr>
 </table>
+
 <h3>Подписчики:</h3>
 @if(count($group->users) === 0)
     <p>Нет подписчиков</p>
@@ -49,12 +52,13 @@
         </thead>
         @foreach($group->posts as $post)
             <tr>
-                <td><a href="{{route('post', $post->id)}}">{{$post->id}}</a></td>
+                <td><a href="{{route('post.show', $post->id)}}">{{$post->id}}</a></td>
                 <td>{{\Illuminate\Support\Str::limit($post->text, 50)}}</td>
             </tr>
         @endforeach
     </table>
 @endif
 
+<a href="{{route('post.create', $group->id)}}">Создать пост</a>
 </body>
 </html>

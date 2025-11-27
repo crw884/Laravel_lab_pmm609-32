@@ -8,7 +8,7 @@
     <h2>id: {{$post->id}}</h2>
 
     <p>Автор: {{$post->user->name}}</p>
-    <p>Группа: {{$post->group->name}}</p>
+    <a href="{{route('group.show', $post->group->id)}}">Группа: {{$post->group->name}}</a>
 
     <p>{{$post->text}}</p>
     @if($post->image)
@@ -22,7 +22,12 @@
             </audio>
         </p>
     @endif
-
+    <a href="{{route('post.edit', $post->id)}}">Редактировать пост</a>
+    <form action="{{route('post.destroy',$post->id)}}" method="POST">
+        @csrf
+        @method('DELETE')
+        <button type="submit">Удалить</button>
+    </form>
 
 @if(count($comments) > 0)
     <p>Комментарии:</p>
