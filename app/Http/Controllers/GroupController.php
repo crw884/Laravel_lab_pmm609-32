@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Group;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class GroupController extends Controller
 {
@@ -37,7 +38,7 @@ class GroupController extends Controller
         ]);
 
         Group::create([
-            'admin_id' => 1, //Auth::id()
+            'admin_id' => Auth::id(),
             'name' => $validated['name'],
             'description' => $validated['description'],
             'is_private' => $request->boolean('private'),

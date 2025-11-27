@@ -7,6 +7,7 @@ use App\Models\Group;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
@@ -27,6 +28,12 @@ class PostController extends Controller
      */
     public function create($group_id)
     {
+        if(!Gate::allows('create-post', Group::all()->where('id', $group_id)->first())) {
+            return redirect('/error')->with(
+                'message', 'Вы не можете публиковать посты в этой группе.'
+            );
+        }
+
         return view('post_create', [
             'group_id'=>$group_id
         ]);
@@ -124,6 +131,11 @@ class PostController extends Controller
      */
     public function destroy(string $id)
     {
+        if(!Gate::allows('destroy-post', Post::all()->where('id', $id)->first())) {
+            return redirect('/error')->with(
+                'message', 'Вы не можете удалить этот пост.'
+            );
+        }
         $post = Post::all()->where('id', $id)->first();
         $post->delete();
         return redirect()->route('post.index')->with('success', 'Группа успешно удалена.');
