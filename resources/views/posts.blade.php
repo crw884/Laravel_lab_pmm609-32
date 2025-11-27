@@ -22,5 +22,7 @@
         </tr>
     @endforeach
 </table>
+{{ $posts->links() }}
+
 </body>
 </html>

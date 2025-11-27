@@ -14,10 +14,11 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $perpage = $request->perpage ?? 5;
         return view('posts', [
-            'posts' => Post::all()
+            'posts' => Post::paginate($perpage)->withQueryString(),
         ]);
     }
 

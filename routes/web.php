@@ -23,11 +23,10 @@ Route::put("/group/{id}", [GroupController::class, 'update'])->name('group.updat
 Route::delete("/group/{id}", [GroupController::class, 'destroy'])->name('group.destroy');
 Route::get("/group/{id}", [GroupController::class, 'show'])->name('group.show');
 
-
 Route::get("/user", [UserController::class, 'index'])->name('user.index');
 Route::get("/user/{id}", [UserController::class, 'show'])->name('user.show');
 
-Route::get("/post", [PostController::class, 'index'])->name('post.index');
+Route::get("/posts", [PostController::class, 'index'])->name('post.index');
 Route::get('/group/{group_id}/createpost', [PostController::class, 'create'])->name('post.create');
 Route::post('/post', [PostController::class, 'store'])->name('post.store');
 Route::get("/post/{id}/edit", [PostController::class, 'edit'])->name('post.edit');
