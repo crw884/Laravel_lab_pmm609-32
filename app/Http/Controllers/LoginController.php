@@ -12,16 +12,17 @@ class LoginController extends Controller
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
+        ],[
+            'email.required' => 'Введите email.',
+            'password.required' => 'Введите пароль.',
         ]);
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            return redirect()->intended('/');
+            return redirect()->intended('/posts')->with('success', 'Вы вошли в аккаунт.');
         }
 
-        return back()->withErrors([
-            'error' => 'The provided credentials do not match our records.',
-        ])->onlyInput('email', 'password');
+        return back()->with('error', 'Неверный логин или пароль.')->onlyInput('email', 'password');
     }
 
     public function login(Request $request)
@@ -36,6 +37,6 @@ class LoginController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('login');
+        return redirect('/posts')->with('success', 'Вы вышли из аккаунта.');
     }
 }

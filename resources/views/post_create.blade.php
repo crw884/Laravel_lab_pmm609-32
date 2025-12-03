@@ -1,42 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>POST CREATE</title>
-</head>
-<body>
-<h2>Добавить пост</h2>
-<form method="post" action="{{route('post.store')}}" enctype="multipart/form-data">
+@extends('layout')
+@section('content')
+
+<form method="post" action="{{route('post.store')}}" enctype="multipart/form-data"
+      class="d-flex flex-column gap-2 w-75 align-items-center border-1 border-dark border p-3 mt-5 bg-dark bg-opacity-10"
+      style="border-radius: 20px;">
+    <h2 class="mb-3">Добавить пост</h2>
     @csrf
     <input hidden name="group_id" value="{{$group_id}}">
     <input name="user_id" type="hidden" value="1">
     <label>Текст публикации</label>
-    <input type="text" name="text" value="{{old('text')}}">
+    <textarea name="text" class="w-100">{{old('text')}}</textarea>
+
     @error('text')
     <div class="is-invalid">{{$message}}</div>
     @enderror
 <br>
     <label>Теги</label>
-    <input type="text" name="tags" value="{{old('tags')}}">
+    <input type="text" name="tags" value="{{old('tags')}}"  class="w-100">
     @error('tags')
     <div class="is-invalid">{{$message}}</div>
     @enderror
 <br>
     <label>Изображение</label>
-    <input type="file" name="image">
+    <input type="file" name="image" class="w-50">
     @error('image')
     <div class="is-invalid">{{$message}}</div>
     @enderror
 <br>
     <label>Трек</label>
-    <input type="file" name="audio">
+    <input type="file" name="audio" class="w-50">
     @error('audio')
     <div class="is-invalid">{{$message}}</div>
     @enderror
 <br>
-    <input type="submit">
+    <button type="submit" class="w-50 btn btn-primary">Создать</button>
 </form>
 
-
-</body>
-</html>
+@endsection

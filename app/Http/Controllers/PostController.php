@@ -18,8 +18,13 @@ class PostController extends Controller
     public function index(Request $request)
     {
         $perpage = $request->perpage ?? 5;
+        // Достаем посты из ПУБЛИЧНЫХ групп
+        $posts = Post::orderBy('created_at', 'desc')->whereIn(
+            'group_id',
+            Group::all()->where('is_private', '=',0)->pluck('id')->toArray()
+        );
         return view('posts', [
-            'posts' => Post::paginate($perpage)->withQueryString(),
+            'posts' => $posts->paginate($perpage)->withQueryString(),
         ]);
     }
 
@@ -71,8 +76,7 @@ class PostController extends Controller
             'tags' => $validated['tags'],
             'image' => $imageData,
             'audio' => $audioData,
-            //'user_id' => Auth::id(),
-            'user_id' => 1,
+            'user_id' => Auth::id(),
             'group_id' => $validated['group_id']
         ]);
 
@@ -85,6 +89,9 @@ class PostController extends Controller
     public function show(string $id)
     {
         $post = Post::all()->where('id', $id)->first();
+        if($post->group->is_private == 1 AND $post->user_id != Auth::id() AND $post->group->admin->id != Auth::id()) {
+            return redirect('/posts')->with('error', 'Публикация недоступна.');
+        }
         if($post === null) {
             abort(404);
         }
@@ -123,7 +130,7 @@ class PostController extends Controller
             'text' => $validated['text'],
         ]);
 
-        return redirect()->route('post.show', $post->id)->with('success', 'Группа обновлена.');
+        return redirect()->route('post.show', $post->id)->with('success', 'Пост успешно обновлен.');
     }
 
     /**
@@ -136,9 +143,20 @@ class PostController extends Controller
                 'message', 'Вы не можете удалить этот пост.'
             );
         }
+
         $post = Post::all()->where('id', $id)->first();
+        foreach ($post->comments as $comment) {
+            $comment->delete();
+        }
+
+        if($post->image != null){
+            Storage::disk('public')->delete($post->image);
+        }
+        if($post->audio != null){
+            Storage::disk('public')->delete($post->audio);
+        }
         $post->delete();
-        return redirect()->route('post.index')->with('success', 'Группа успешно удалена.');
+        return redirect()->route('post.index')->with('success', 'Пост успешно удален.');
     }
 
 

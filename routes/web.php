@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PostController;
@@ -46,5 +47,9 @@ Route::get("/post/{id}", [PostController::class, 'show'])->name('post.show');
 Route::get('/post/{id}/image', [PostController::class, 'getImage'])->name('post.image');
 Route::get('/post/{id}/audio', [PostController::class, 'getAudio'])->name('post.audio');
 
+Route::post('/post/{id}', [CommentController::class, 'store'])->name('comment.store');
+
+Route::post('/group/{id}/subscribe', [GroupController::class, 'subscribe'])->name('group.subscribe');
+Route::post('/group/{id}/unsubscribe', [GroupController::class, 'unsubscribe'])->name('group.unsubscribe');
 
 

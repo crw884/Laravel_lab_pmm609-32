@@ -21,6 +21,7 @@ class Post extends Model
         'audio',
     ];
 
+
     function group() : BelongsTo
     {
         return $this->belongsTo(Group::class);

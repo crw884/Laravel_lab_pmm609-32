@@ -1,12 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{$user->name}}</title>
-</head>
-<body>
-<h2>Информация о пользователе</h2>
-<table>
+@extends('layout')
+@section('content')
+<h2>Информация о пользователе {{$user->name}} </h2>
+<table class="table table-bordered table-striped">
     <thead>
     <td>id</td>
     <td>Никнейм</td>
@@ -21,11 +16,11 @@
     </tr>
 </table>
 
-<h3>Группы:</h3>
+<h3>Подписки</h3>
 @if(count($user->groups) === 0)
     <p>Нет групп</p>
 @else
-    <table>
+    <table class="table table-striped table-bordered">
         <thead>
         <td>id</td>
         <td>имя группы</td>
@@ -39,5 +34,4 @@
     </table>
 @endif
 
-</body>
-</html>
+@endsection

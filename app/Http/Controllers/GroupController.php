@@ -52,6 +52,13 @@ class GroupController extends Controller
      */
     public function show(string $id)
     {
+        $group = Group::all()->where('id', $id)->first();
+        if($group->is_private
+            AND !$group->users()->where('user_id', Auth::id())->exists()
+            AND Auth::id() != $group->admin->id)
+        {
+            return redirect("group")->with('error', 'Группа приватная.');
+        }
         return view('group', [
             'group' => Group::all()->where('id', $id)->first(),
         ]);
@@ -63,6 +70,9 @@ class GroupController extends Controller
     public function edit(string $id)
     {
         $group = Group::all()->where('id', $id)->first();
+        if($group->admin->id != Auth::id()){
+            return redirect()->back()->with('error', "Вы не можете редактировать эту группу");
+        }
         return view('group_edit', [
             'group' => $group,
         ]);
@@ -74,6 +84,9 @@ class GroupController extends Controller
     public function update(Request $request, string $id)
     {
         $group = Group::all()->where('id', $id)->first();
+        if($group->admin->id != Auth::id()){
+            return redirect('group')->with('error', "Вы не можете редактировать эту группу");
+        }
         $validated = $request->validate([
             'description' => 'required|max:255'
         ]);
@@ -93,5 +106,29 @@ class GroupController extends Controller
         $group = Group::all()->where('id', $id)->first();
         $group->delete();
         return redirect()->route('group.index')->with('success', 'Группа успешно удалена.');
+    }
+
+    public function subscribe(string $id)
+    {
+        $group = Group::all()->where('id', $id)->first();
+        if ($group->users()->where('user_id', Auth::id())->exists()) {
+            return back()->with('error', 'Вы уже подписаны на эту группу');
+        }
+
+        $group->users()->attach(Auth::id());
+
+        return back()->with('success', 'Вы успешно подписались');
+    }
+
+    public function unsubscribe(string $id)
+    {
+        $group = Group::all()->where('id', $id)->first();
+        if (!$group->users()->where('user_id', Auth::id())->exists()) {
+            return back()->with('error', 'Вы не подписаны на эту группу');
+        }
+
+        $group->users()->detach(Auth::id());
+
+        return back()->with('success', 'Вы успешно отписались');
     }
 }

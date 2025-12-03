@@ -1,23 +1,20 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>POST EDIT</title>
-</head>
+@extends('layout')
+@section('content')
 <body>
-<h2>Редактировать публикацию</h2>
-<form method="post" action="{{route('post.update', $post->id)}}">
+
+<form method="post" action="{{route('post.update', $post->id)}}"
+      class="d-flex flex-column align-items-center gap-2 border-1 border-dark border p-4 mt-5 bg-dark bg-opacity-10"
+      style="border-radius: 20px;">
+    <h2 >Редактировать публикацию</h2 >
     @csrf
     @method('PUT')
-    <label>Редактировать текст поста</label>
-    <input type="text" name="text" value="{{$post->description}}">
+    <label >Редактировать текст поста</label>
+    <textarea class="w-100" type="text" name="text">{{old('text')}}</textarea>
     @error('description')
     <div class="is-invalid">{{$message}}</div>
     @enderror
     <br>
-    <input type="submit">
+    <button type="submit" class="btn btn-info">Сохранить изменения</button>
 </form>
 
-
-</body>
-</html>
+@endsection
