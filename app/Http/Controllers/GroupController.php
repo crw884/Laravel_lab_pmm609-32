@@ -71,7 +71,7 @@ class GroupController extends Controller
     {
         $group = Group::all()->where('id', $id)->first();
         if($group->admin->id != Auth::id()){
-            return redirect()->back()->with('error', "Вы не можете редактировать эту группу");
+            return redirect()->route('group.index')->with('error', "Вы не можете редактировать эту группу");
         }
         return view('group_edit', [
             'group' => $group,
@@ -85,7 +85,7 @@ class GroupController extends Controller
     {
         $group = Group::all()->where('id', $id)->first();
         if($group->admin->id != Auth::id()){
-            return redirect('group')->with('error', "Вы не можете редактировать эту группу");
+            return redirect()->route('group.index')->with('error', "Вы не можете редактировать эту группу");
         }
         $validated = $request->validate([
             'description' => 'required|max:255'

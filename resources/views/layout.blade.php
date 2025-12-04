@@ -26,12 +26,12 @@
 @include('error')
 <div class="container">
     <div class="row">
-        <div class="col-3"></div>
-        <div class="col-6 d-flex flex-column align-items-center">
+        <div class="col-lg-3 col-sm-1"></div>
+        <div class="col-lg-6 col-sm-10 d-flex flex-column align-items-center">
             @section('content')
             @show
         </div>
-        <div class="col-3"></div>
+        <div class="col-lg-3 col-sm-1"></div>
     </div>
 </div>
 

@@ -28,7 +28,7 @@
         @foreach($user->groups as $group)
             <tr>
                 <td>{{$group->id}}</td>
-                <td>{{$group->name}}</td>
+                <td><a href="{{route('group.show', $group->id)}}"> {{$group->name}}</a></td>
             </tr>
         @endforeach
     </table>

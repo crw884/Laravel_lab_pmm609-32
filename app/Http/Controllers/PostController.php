@@ -89,6 +89,9 @@ class PostController extends Controller
     public function show(string $id)
     {
         $post = Post::all()->where('id', $id)->first();
+        if($post == null){
+            return redirect('/posts')->with('error','Пост с таким id не найден.');
+        }
         if($post->group->is_private == 1 AND $post->user_id != Auth::id() AND $post->group->admin->id != Auth::id()) {
             return redirect('/posts')->with('error', 'Публикация недоступна.');
         }
