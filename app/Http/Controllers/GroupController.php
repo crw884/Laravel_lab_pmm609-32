@@ -70,6 +70,9 @@ class GroupController extends Controller
     public function edit(string $id)
     {
         $group = Group::all()->where('id', $id)->first();
+        if($group == null){
+            return redirect()->route('group.index')->with('error', 'Группы с таким id не существует.');
+        }
         if($group->admin->id != Auth::id()){
             return redirect()->route('group.index')->with('error', "Вы не можете редактировать эту группу");
         }

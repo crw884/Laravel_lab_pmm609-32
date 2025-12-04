@@ -29,12 +29,12 @@ Route::put("/group/{id}", [GroupController::class, 'update'])->name('group.updat
 Route::delete("/group/{id}", [GroupController::class, 'destroy'])->name('group.destroy')->middleware('auth');
 Route::get("/group/{id}", [GroupController::class, 'show'])->name('group.show');
 
-Route::get("/user", [UserController::class, 'index'])->name('user.index');
+Route::get("/users", [UserController::class, 'index'])->name('user.index');
 Route::get("/user/{id}", [UserController::class, 'show'])->name('user.show');
 
 Route::post('/auth', [LoginController::class, 'authenticate'])->name('authenticate');
 Route::get('/login', [LoginController::class, 'login'])->name('login');
-Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+Route::get('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');;
 
 Route::get("/posts", [PostController::class, 'index'])->name('post.index');
 Route::get('/group/{group_id}/createpost', [PostController::class, 'create'])->name('post.create')->middleware('auth');
@@ -47,9 +47,9 @@ Route::get("/post/{id}", [PostController::class, 'show'])->name('post.show');
 Route::get('/post/{id}/image', [PostController::class, 'getImage'])->name('post.image');
 Route::get('/post/{id}/audio', [PostController::class, 'getAudio'])->name('post.audio');
 
-Route::post('/post/{id}', [CommentController::class, 'store'])->name('comment.store');
+Route::post('/post/{id}', [CommentController::class, 'store'])->name('comment.store')->middleware('auth');;
 
-Route::post('/group/{id}/subscribe', [GroupController::class, 'subscribe'])->name('group.subscribe');
-Route::post('/group/{id}/unsubscribe', [GroupController::class, 'unsubscribe'])->name('group.unsubscribe');
+Route::post('/group/{id}/subscribe', [GroupController::class, 'subscribe'])->name('group.subscribe')->middleware('auth');;
+Route::post('/group/{id}/unsubscribe', [GroupController::class, 'unsubscribe'])->name('group.unsubscribe')->middleware('auth');;
 
 

@@ -15,8 +15,8 @@
     <div class="is-invalid">{{$message}}</div>
     @enderror
 <br>
-    <label>Теги</label>
-    <input type="text" name="tags" value="{{old('tags')}}"  class="w-100">
+    <label hidden for="tags">Теги</label>
+    <input id="tags" type="hidden" name="tags" value="{{old('tags')}}"  class="w-100">
     @error('tags')
     <div class="is-invalid">{{$message}}</div>
     @enderror
