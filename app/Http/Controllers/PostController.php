@@ -58,6 +58,10 @@ class PostController extends Controller
             'group_id' => 'required|exists:groups,id',
             'image' => 'image|mimes:jpeg,png,jpg,gif|max:8192',
             'audio' => 'mimes:mp3,wav,ogg|max:24728'
+        ],[
+            'text' => 'Обязательное поле.',
+            'image'=>'Только картинки в формате jpg, png, jpeg',
+            'audio'=>'Только аудио-файлы в формате mp3, waw, ogg'
         ]);
 
         $imageData = null;

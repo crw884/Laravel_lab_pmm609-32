@@ -61,6 +61,9 @@
 
 
     <h3 class="mb-3">Публикации:</h3>
+    @if($group->users->contains('id', Auth::id()) OR $group->admin->id === Auth::id())
+        <a href="{{route('post.create', $group->id)}}" class="btn btn-primary mb-4">Создать пост</a>
+    @endif
     @if(count($group->posts) === 0)
         <p >Нет публикаций</p>
     @else
@@ -88,8 +91,6 @@
         </div>
     @endif
 
-    @if($group->users->contains('id', Auth::id()) OR $group->admin->id === Auth::id())
-        <a href="{{route('post.create', $group->id)}}" class="btn btn-primary mb-4">Создать пост</a>
-    @endif
+
 
 @endsection
