@@ -37,6 +37,8 @@ class GroupController extends Controller
             'description' => 'required|max:255'
         ]);
 
+        Group::find("1");
+
         Group::create([
             'admin_id' => Auth::id(),
             'name' => $validated['name'],
