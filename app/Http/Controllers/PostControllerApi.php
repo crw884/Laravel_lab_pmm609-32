@@ -13,6 +13,8 @@ class PostControllerApi extends Controller
     public function index()
     {
         return response(Post::all());
+
+        
     }
 
     /**
