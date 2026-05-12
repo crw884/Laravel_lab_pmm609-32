@@ -17,6 +17,7 @@ class GroupController extends Controller
         return view('groups', [
             'groups' => Group::all()
         ]);
+
     }
 
     /**

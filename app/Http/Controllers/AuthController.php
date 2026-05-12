@@ -20,7 +20,7 @@ class AuthController extends Controller
         }
 
         if (!Hash::check($fields['password'], $user->password)) {
-            return response(['message' => 'Неверный пароль'], 401);
+            return response(['message' => 'Неверный пароль.'], 401);
         }
 
         $token = $user->createToken('sc-token')->plainTextToken;
@@ -34,9 +34,8 @@ class AuthController extends Controller
     public function logout(Request $request){
         auth()->user()->tokens()->delete();
         return response([
-            'message' => 'Logged out'
-            // я не знаю нужно ли чтобы ответы APIшки были на русском вообще,
-            // пока пусть так будет
+            'message' => 'Вы вышли из аккаунта.'
+
         ]);
     }
 }

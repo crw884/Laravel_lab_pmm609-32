@@ -25,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+
         Paginator::defaultView('pagination::default');
 
         Gate::define('destroy-post', function (User $user, Post $post) {
@@ -38,7 +39,8 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Gate::define('editOrDestroyGroup', function (User $user, Group $group) {
-            return $user->id === $group->admin()->id;
+            return $user->id === $group->admin->id;
         });
+
     }
 }
