@@ -141,8 +141,8 @@ class GroupControllerApi extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|max:64',
-            'description' => 'max:256',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'description' => 'nullable|max:256',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:8192',
         ]);
 
         $image = request()->file('image');
@@ -165,13 +165,14 @@ class GroupControllerApi extends Controller
 
         $group = new Group($validated);
         $group->admin_id = $request->user_id;
-        $group->is_private = $request->is_private == 1 ? 1 : 0;
+        $group->is_private = $request->is_private == 'true' ? 1 : 0;
         if($image) $group->image = $imageURL;
         $group->save();
         return response()->json(
             [
                 'code' => 201,
-                'message' => 'Группа успешно создана.'
+                'message' => 'Группа успешно создана.',
+                'id' => $group->id
             ]
         );
     }
@@ -203,12 +204,13 @@ class GroupControllerApi extends Controller
         $validated = $request->validate([
             'name' => 'required|max:64',
             'description' => 'nullable|max:256',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:8192',
         ]);
 
         try{
             if($request['name']) $group->name = $validated['name'];
-            if($request['description']) $group->description = $validated['description'];
+            if($request['description']) $group->description = $validated['description']; else $group->description = '';
+            if($request['is_private']) $group->is_private = $request['is_private'] == 'true';
             if($request->hasFile('image')){
                 try{
                     if($group->image){
@@ -231,7 +233,8 @@ class GroupControllerApi extends Controller
                 } catch (\Exception $e){
                     return response()->json(['message' => 'Ошибка при загрукзе в S3 хранилище: ' . $e->getMessage()], 500);
                 }
-            } else {
+            }
+            if($request['delete_image']) {
                 if($group->image){
                     $bucket = config('filesystems.disks.s3.bucket');
                     $baseUrl = Storage::disk('s3')->getClient()->getEndpoint();
@@ -283,6 +286,7 @@ class GroupControllerApi extends Controller
         if($group->posts()->count() > 0){
             return response()->json(['code' => 401, 'message'=>'Нельзя удалить непустую группу'], 401);
         }
+
         if($group->image != null) {
             $bucket = config('filesystems.disks.s3.bucket');
             $baseUrl = Storage::disk('s3')->getClient()->getEndpoint();
@@ -294,7 +298,8 @@ class GroupControllerApi extends Controller
             if(Storage::disk('s3')->exists($url)) {
                 Storage::disk('s3')->delete($url);
             }
-        };
+        }
+        $group->users()->detach();
         $deleted = Group::destroy($id);
 
         if($deleted === 0){
