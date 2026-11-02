@@ -157,7 +157,7 @@ class GroupControllerApi extends Controller
                 return response()->json(
                     [
                         'code' => 500,
-                        'message' => 'Ошибка при загрузке в хранилище S3.'
+                        'message' => 'Ошибка при загрузке в S3 хранилище.'
                     ]
                 );
             }
