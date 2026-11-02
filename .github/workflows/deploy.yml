@@ -1,0 +1,39 @@
+name: Deploy backend
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: deploy-api
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Prepare SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H "$SSH_HOST" >> ~/.ssh/known_hosts
+
+      - name: Pull and rebuild
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+        run: |
+          ssh -i ~/.ssh/id_ed25519 "$SSH_USER@$SSH_HOST" bash -s << 'EOF'
+          set -euo pipefail
+          git -C /var/www/app-backend pull --ff-only origin main
+          cd /root
+          docker compose build app-backend
+          docker compose up -d app-backend
+          docker exec app-backend php artisan migrate --force
+          docker exec app-backend php artisan config:cache
+          docker exec app-backend php artisan route:cache
+          EOF
